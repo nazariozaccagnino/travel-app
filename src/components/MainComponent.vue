@@ -2,7 +2,7 @@
     <div>+ aggiungi nuovo viaggio</div>
     <div v-for="(item, index) in store.travels" :key="index">
         <div class="d-flex">
-            <div class="card h-100" style="width: 18rem;">
+            <div class="card" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title">{{ item.destination }}</h5>
                     <h6 class="card-subtitle mb-2 text-body-secondary">Data inizio e fine viaggio</h6>
@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div v-for="(item, index) in store.travels" :key="index">
-                <div class="card h-100" style="width: 18rem;">
+                <div class="card" style="width: 18rem;">
                     <img src="..." class="card-img-top" alt="MAPPA">
                     <div class="card-body">
                         <h5 class="card-title">{{ item.details.place.latitude }}</h5>
