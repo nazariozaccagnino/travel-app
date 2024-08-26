@@ -1,6 +1,6 @@
 <template>
-    <div>
-        Header
+    <div class="text-center">
+        App travel diary
     </div>
 </template>
 

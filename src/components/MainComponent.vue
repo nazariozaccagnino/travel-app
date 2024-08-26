@@ -1,15 +1,20 @@
 <template>
+    <div>+ aggiungi nuovo viaggio</div>
     <div>
-        Main
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Destinazione Viaggio</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">Data inizio e fine viaggio</h6>
+                <p class="card-text">Descrizione sintetica viaggio</p>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'MainComponent'        
-    }
+export default {
+    name: 'MainComponent'
+}
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
