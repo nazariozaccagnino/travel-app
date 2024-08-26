@@ -1,21 +1,28 @@
 <template>
-  <div>
-    <i class="fa fa-solid fa-home"></i>
-    <h1 class="text-center">Test</h1>
-  </div>
+  <HeaderComponent></HeaderComponent>
+  <MainComponent></MainComponent>
+  <FooterComponent></FooterComponent>
 </template>
 
 <script>
-  export default {
-    name: 'App',
-    data(){
-      return{
+import { store } from './store.js'
+import HeaderComponent from './components/HeaderComponent.vue'
+import MainComponent from './components/MainComponent.vue'
+import FooterComponent from './components/FooterComponent.vue'
 
-      }
+export default {
+  name: 'App',
+  components: {
+    HeaderComponent,
+    MainComponent,
+    FooterComponent,
+  },
+  data() {
+    return {
+
     }
   }
+}
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
