@@ -1,6 +1,6 @@
 <template>
-    <div>+ aggiungi nuovo viaggio</div>
-    <div v-for="(item, index) in store.travels" :key="index">
+    <div class="btn btn-primary" @click="addTrip(this.newTrip)">+ aggiungi nuovo viaggio</div>
+    <div v-for="(item, index) in store.travels" :key="index" class="p-2">
         <div class="d-flex">
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
@@ -32,11 +32,36 @@ export default {
     name: 'MainComponent',
     data() {
         return {
-            store
+            store,
+            errorInputName: false,
+            newTrip: {
+                destination: '',
+                tripdate: '',
+                rating: '',
+                details: {
+                    images: [],
+                    place: {
+                        "latitude": 0,
+                        "longitude": 0
+                    },
+                    notes: '',
+                }
+            }
         }
     },
-    mounted() {
-        console.log(this.store.travels);
+    methods: {
+        addTrip(newTrip) {
+            if (this.newTrip.tripName === '') {
+                return this.errorInputName = true;
+            }
+            else {
+                this.errorInputName = false;
+                this.store.travels.push({ ...newTrip })
+            }
+        },
+        mounted() {
+            console.log(this.store.travels);
+        }
     }
 }
 </script>
