@@ -10,11 +10,11 @@
                     <button type="button" class="btn btn-success btn-sm">Aggiungi nuova tappa</button>
                 </div>
             </div>
-            <div v-for="(item, index) in store.travels" :key="index">
+            <div v-for="childItems in item.details">
                 <div class="card" style="width: 18rem;">
                     <img src="..." class="card-img-top" alt="MAPPA">
                     <div class="card-body">
-                        <h5 class="card-title">{{ item.details.place.latitude }}</h5>
+                        <h5 class="card-title">{{ childItems }}</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of
                             the
                             card's content.</p>
@@ -35,17 +35,25 @@ export default {
             store,
             errorInputName: false,
             newTrip: {
-                destination: '',
+                destination: 'a',
                 tripdate: '',
                 rating: '',
-                details: {
-                    images: [],
-                    place: {
-                        "latitude": 0,
-                        "longitude": 0
-                    },
-                    notes: '',
-                }
+                details: [{
+                    voce1: 'a',
+                    voce2:'b'
+                },
+                {
+                    voce1: 'a',
+                    voce2:'b'
+                }]
+            },
+            newleg: {
+                images: [],
+                place: {
+                    "latitude": 0,
+                    "longitude": 0
+                },
+                notes: '',
             }
         }
     },
@@ -56,11 +64,15 @@ export default {
             }
             else {
                 this.errorInputName = false;
+                console.log(this.newTrip);
                 this.store.travels.push({ ...newTrip })
+                console.log(this.store.travels);
+                console.log(this.store.travels.details);
+
+
             }
         },
         mounted() {
-            console.log(this.store.travels);
         }
     }
 }
