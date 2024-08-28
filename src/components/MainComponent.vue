@@ -29,7 +29,7 @@
                         <p class="card-text">{{ item.rating }}</p>
                         <div class="d-flex justify-content-between">
                             <button type="button" class="btn btn-success btn-sm mx-auto"
-                                @click="openModal2(index)">Aggiungi
+                                @click="openModal2(index, item)">Aggiungi
                                 nuova tappa</button>
                         </div>
                     </div>
@@ -37,7 +37,7 @@
             </section>
             <div v-for="childItems in item.details" :key="index">
                 <div class="card my-3 mx-2" style="width: 23rem;">
-                    <img src="..." class="card-img-top" alt="MAPPA">
+                    <div id="map"></div>
                     <div class="card-body">
                         <h5 class="card-title">{{ childItems.name }}</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of
@@ -64,7 +64,6 @@
                         <div class="mb-3">
                             <div v-if="this.error == true">ERROREE</div>
                             <div id="map"></div>
-
                             <div>Inserisci nome destinazione</div>
                             <input type="text" class="form-control" v-model="newTrip.destination">
                             <div>Inserisci data inizio viaggio</div>
@@ -127,6 +126,7 @@
                     <form>
                         <div class="mb-3">
                             <div v-if="this.error == true">ERROREE</div>
+                            <div id="map2"></div>
                             <div>Inserisci nome tappa</div>
                             <input type="text" class="form-control" v-model="newLeg.name">
                             <div>Inserisci data arrivo</div>
@@ -261,6 +261,7 @@ export default {
                 this.newLeg.images = [];
             this.newLeg.notes = '';
             this.closeModal();
+            this.map3()
         },
         openModal() {
             this.showModal = true;
@@ -268,9 +269,12 @@ export default {
                 this.map();
             }, 1000);
         },
-        openModal2(index) {
+        openModal2(index, item) {
             this.showModal2 = true;
             this.i = index
+            let showmap = setTimeout(() => {
+                this.map();
+            }, 1000);
         },
         closeModal() {
             this.showModal = false;
@@ -307,10 +311,13 @@ export default {
             }
 
             let map = new L.map('map', mapOptions);
+            let map2 = new L.map('map2', mapOptions);
+
 
             let layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
             map.addLayer(layer);
-
+            let layer2 = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+            map2.addLayer(layer2);
 
             let apiKey = "9098219d18994560be55415be86df062",
                 marker = null;
@@ -355,7 +362,8 @@ export default {
 
 
             map.addControl(addressSearchControl);
-        }
+        },
+        
     },
     mounted() {
         this.loadTravels()
