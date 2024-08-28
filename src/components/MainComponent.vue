@@ -1,36 +1,38 @@
 <template>
-    <div class="btn btn-primary" @click="openModal">+ Aggiungi nuovo viaggio</div>
-    <div v-for="(item, index) in store.travels" :key="index" class="p-2">
+    <div class="d-flex justify-content-center">
+        <div class="btn btn-primary" @click="openModal">+ Aggiungi nuovo viaggio</div>
+    </div>
+    <div v-for="(item, index) in store.travels" :key="index" class="p-2 riga">
         <div class="d-flex">
-            <section class="my-5" style="max-width: 23rem;">
-        <div class="card">
-            <div class="card-body d-flex flex-row">
-                <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-8.jpg" class="rounded-circle me-3"
-                    height="50px" width="50px" alt="avatar" />
-                <div>
-                    <h5 class="card-title font-weight-bold mb-2">{{ item.destination }}</h5>
-                    <p class="card-text"><i class="far fa-clock pe-2"></i>{{ item.startdate }} -> {{ item.enddate }}</p>
+            <section class="my-5" style="width: 23rem;">
+                <div class="card">
+                    <div class="card-body d-flex flex-row">
+                        <div>
+                            <h5 class="card-title font-weight-bold mb-2">{{ item.destination }}</h5>
+                            <p class="card-text"><i class="far fa-clock pe-2"></i>{{ item.startdate }} -> {{
+                                item.enddate }}</p>
+                        </div>
+                    </div>
+                    <div class="bg-image hover-overlay ripple rounded-0" data-mdb-ripple-color="light">
+                        <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Food/full page/2.jpg"
+                            alt="Card image cap" />
+                        <a href="#!">
+                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{ item.description }}</p>
+                        <p class="card-text">{{ item.rating }}</p>
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-success btn-sm mx-auto"
+                                @click="addLeg(this.newLeg, index)">Aggiungi
+                                nuova tappa</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="bg-image hover-overlay ripple rounded-0" data-mdb-ripple-color="light">
-                <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Food/full page/2.jpg"
-                    alt="Card image cap" />
-                <a href="#!">
-                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                </a>
-            </div>
-            <div class="card-body">
-                <p class="card-text">{{ item.description }}</p>
-                <p class="card-text">{{ item.rating }}</p>
-                <div class="d-flex justify-content-between">
-                    <button type="button" class="btn btn-success btn-sm mx-auto" @click="addLeg(this.newLeg, index)">Aggiungi
-                        nuova tappa</button>
-                </div>
-            </div>
-        </div>
-    </section>
+            </section>
             <div v-for="childItems in item.details" :key="index">
-                <div class="card" style="width: 18rem;">
+                <div class="card my-5 mx-2" style="max-width: 23rem;">
                     <img src="..." class="card-img-top" alt="MAPPA">
                     <div class="card-body">
                         <h5 class="card-title">{{ childItems.voce1 }}</h5>
@@ -101,7 +103,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="closeModal">Close</button>
-                    <button type="button" class="btn btn-primary" @click="addTrip(this.newTrip)">Save changes</button>
+                    <button type="button" class="btn btn-primary" @click="addTrip(this.newTrip)" id="savebtn">Save changes</button>
                 </div>
             </div>
         </div>
@@ -133,12 +135,21 @@ export default {
                 },
                 images: [],
                 notes: '',
-            }
+            },
+            errors: {
+                destination: '',
+                startdate: '',
+                enddate: '',
+                description: '',
+                rating: ''
+            },
         }
     },
     methods: {
         addTrip(newTrip) {
-            if (this.newTrip.tripName === '') {
+            if (this.newTrip.destination === '') {
+                const input = document.getElementById(savebtn);
+                input.preventDefault()
                 return this.errorInputName = true;
             }
             else {
@@ -175,6 +186,15 @@ export default {
         closeModal() {
             this.showModal = false;
         },
+        validateForm() {
+            let isValid = true;
+            // Name
+            if (this.newTrip.destination.trim() === '') {
+                this.errors.name = 'La destinazione è obbligatoria';
+                isValid = false;
+            }
+            return isValid
+        },
         computed() {
 
         }
@@ -191,5 +211,9 @@ export default {
 /*card style*/
 body {
     background-color: #f5f7fa;
+}
+
+.riga{
+    overflow-x:auto;
 }
 </style>
