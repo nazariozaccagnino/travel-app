@@ -4,6 +4,7 @@
         <div class="btn btn-primary" @click="emptyTravels">Elimina tutto</div>
         <div class="btn btn-primary" @click="bottone">bottone tuttofare</div>
 
+
     </div>
     <div v-for="(item, index) in store.travels" :key="index" class="p-2 riga">
         <div class="d-flex">
@@ -27,7 +28,8 @@
                         <p class="card-text">{{ item.description }}</p>
                         <p class="card-text">{{ item.rating }}</p>
                         <div class="d-flex justify-content-between">
-                            <button type="button" class="btn btn-success btn-sm mx-auto" @click="openModal2(index)">Aggiungi
+                            <button type="button" class="btn btn-success btn-sm mx-auto"
+                                @click="openModal2(index)">Aggiungi
                                 nuova tappa</button>
                         </div>
                     </div>
@@ -37,7 +39,7 @@
                 <div class="card my-3 mx-2" style="width: 23rem;">
                     <img src="..." class="card-img-top" alt="MAPPA">
                     <div class="card-body">
-                        <h5 class="card-title">{{ childItems.name}}</h5>
+                        <h5 class="card-title">{{ childItems.name }}</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of
                             the
                             card's content.</p>
@@ -61,6 +63,8 @@
                     <form>
                         <div class="mb-3">
                             <div v-if="this.error == true">ERROREE</div>
+                            <div id="map"></div>
+
                             <div>Inserisci nome destinazione</div>
                             <input type="text" class="form-control" v-model="newTrip.destination">
                             <div>Inserisci data inizio viaggio</div>
@@ -187,7 +191,8 @@ export default {
             error: false,
             showModal: false,
             showModal2: false,
-            i:0,
+            i: 0,
+            address:{},
             newTrip: {
                 destination: '',
                 startdate: '',
@@ -221,14 +226,11 @@ export default {
         addTrip(newTrip) {
             if (this.newTrip.destination === '') {
                 const input = document.getElementById(savebtn);
-                input.preventDefault()
                 this.error = true;
             }
             else {
                 this.errorInputName = false;
-                console.log(this.newTrip);
                 this.store.travels.push({ ...newTrip })
-                console.log(this.store.travels);
                 this.newTrip.destination = '';
                 this.newTrip.startdate = '';
                 this.newTrip.enddate = '';
@@ -247,25 +249,28 @@ export default {
             console.log(index);
             console.log(this.newLeg);
             this.store.travels[this.i].details.push({ ...newLeg });
-            this.i=0;
+            this.i = 0;
             console.log(this.store.travels);
             this.newLeg.name = '';
-            this.startdate= '',
-            this.enddate= '',
-            this.newLeg.place = {
-                "latitude": 0,
-                "longitude": 0,
-            },
+            this.startdate = '',
+                this.enddate = '',
+                this.newLeg.place = {
+                    "latitude": 0,
+                    "longitude": 0,
+                },
                 this.newLeg.images = [];
             this.newLeg.notes = '';
             this.closeModal();
         },
         openModal() {
             this.showModal = true;
+            let showmap = setTimeout(() => {
+                this.map();
+            }, 1000);
         },
         openModal2(index) {
             this.showModal2 = true;
-            this.i=index
+            this.i = index
         },
         closeModal() {
             this.showModal = false;
@@ -295,6 +300,62 @@ export default {
             this.store.travels = [];
             localStorage.clear();
         },
+        map() {
+            let mapOptions = {
+                center: [51.5073219, -0.1276474],
+                zoom: 15
+            }
+
+            let map = new L.map('map', mapOptions);
+
+            let layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+            map.addLayer(layer);
+
+
+            let apiKey = "9098219d18994560be55415be86df062",
+                marker = null;
+
+
+            const addressSearchControl = L.control.addressSearch(apiKey, {
+                position: 'topright',
+
+                //set it true to search addresses nearby first
+                mapViewBias: true,
+
+                //Text shown in the Address Search field when it's empty
+                placeholder: "Enter an address here",
+
+                // /Callback to notify when a user has selected an address
+                resultCallback: (address) => {
+                    this.address=address
+                    this.newTrip.destination=address.address_line1
+                    
+
+                    // If there is already a marker remove it
+                    if (marker) {
+                        marker.remove();
+                    }
+                    //Prevent throwing Errors when the address search box is empty
+                    if (!address) {
+                        return;
+                    }
+
+                    //add marker 
+                    marker = L.marker([address.lat, address.lon]).addTo(map);
+                    //Sets the view of the map (geographical center and zoom) with the given animation options.
+                    map.setView([address.lat, address.lon], 20);
+                },
+
+
+                //Callback to notify when new suggestions have been obtained for the entered text
+                suggestionsCallback: (suggestions) => {
+                    console.log(suggestions);
+                }
+            });
+
+
+            map.addControl(addressSearchControl);
+        }
     },
     mounted() {
         this.loadTravels()
@@ -316,5 +377,10 @@ body {
 
 .riga {
     overflow-x: auto;
+}
+
+#map {
+    width: 100%;
+    height: 250px;
 }
 </style>
