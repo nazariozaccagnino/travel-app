@@ -2,15 +2,33 @@
     <div class="btn btn-primary" @click="openModal">+ Aggiungi nuovo viaggio</div>
     <div v-for="(item, index) in store.travels" :key="index" class="p-2">
         <div class="d-flex">
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">{{ item.destination }}</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">Data inizio e fine viaggio</h6>
-                    <p class="card-text">Descrizione sintetica viaggio</p>
-                    <button type="button" class="btn btn-success btn-sm" @click="addLeg(this.newLeg, index)">Aggiungi
+            <section class="my-5" style="max-width: 23rem;">
+        <div class="card">
+            <div class="card-body d-flex flex-row">
+                <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-8.jpg" class="rounded-circle me-3"
+                    height="50px" width="50px" alt="avatar" />
+                <div>
+                    <h5 class="card-title font-weight-bold mb-2">{{ item.destination }}</h5>
+                    <p class="card-text"><i class="far fa-clock pe-2"></i>{{ item.startdate }} -> {{ item.enddate }}</p>
+                </div>
+            </div>
+            <div class="bg-image hover-overlay ripple rounded-0" data-mdb-ripple-color="light">
+                <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Food/full page/2.jpg"
+                    alt="Card image cap" />
+                <a href="#!">
+                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                </a>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ item.description }}</p>
+                <p class="card-text">{{ item.rating }}</p>
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-success btn-sm mx-auto" @click="addLeg(this.newLeg, index)">Aggiungi
                         nuova tappa</button>
                 </div>
             </div>
+        </div>
+    </section>
             <div v-for="childItems in item.details" :key="index">
                 <div class="card" style="width: 18rem;">
                     <img src="..." class="card-img-top" alt="MAPPA">
@@ -28,23 +46,66 @@
 
 
     <!--modale-->
-    <div v-if="showModal" class="modal fade show d-block" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        ...
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @click="closeModal">Close</button>
-                        <button type="button" class="btn btn-primary" @click="addTrip(this.newTrip)">Save changes</button>
-                    </div>
+    <div v-if="showModal" class="modal fade show d-block" id="exampleModal" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Inserisci nuovo viaggio</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <div>Inserisci nome destinazione</div>
+                            <input type="text" class="form-control" v-model="newTrip.destination">
+                            <div>Inserisci data inizio viaggio</div>
+                            <input type="date" class="form-control" v-model="newTrip.startdate">
+                            <div>Inserisci data fine viaggio</div>
+                            <input type="date" class="form-control" v-model="newTrip.enddate">
+                            <div>Inserisci descrizione sintetica</div>
+                            <input type="textarea" class="form-control" v-model="newTrip.description">
+                            <div>Inserisci valutazione</div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                                    value="1" v-model="newTrip.rating">
+                                <label class="form-check-label" for="inlineRadio1">1 <i class="fa-solid fa-star"
+                                        style="color: #FFD43B;"></i></label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                                    value="2" v-model="newTrip.rating">
+                                <label class="form-check-label" for="inlineRadio1">2 <i class="fa-solid fa-star"
+                                        style="color: #FFD43B;"></i></label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                                    value="3" v-model="newTrip.rating">
+                                <label class="form-check-label" for="inlineRadio1">3 <i class="fa-solid fa-star"
+                                        style="color: #FFD43B;"></i></label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                                    value="4" v-model="newTrip.rating">
+                                <label class="form-check-label" for="inlineRadio1">4 <i class="fa-solid fa-star"
+                                        style="color: #FFD43B;"></i></label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                                    value="5" v-model="newTrip.rating">
+                                <label class="form-check-label" for="inlineRadio1">5 <i class="fa-solid fa-star"
+                                        style="color: #FFD43B;"></i></label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @click="closeModal">Close</button>
+                    <button type="button" class="btn btn-primary" @click="addTrip(this.newTrip)">Save changes</button>
                 </div>
             </div>
         </div>
+    </div>
 </template>
 
 <script>
@@ -58,7 +119,9 @@ export default {
             showModal: false,
             newTrip: {
                 destination: '',
-                tripdate: '',
+                startdate: '',
+                enddate: '',
+                description: '',
                 rating: '',
                 details: []
             },
@@ -84,7 +147,9 @@ export default {
                 this.store.travels.push({ ...newTrip })
                 console.log(this.store.travels);
                 this.newTrip.destination = '';
-                this.newTrip.tripdate = '';
+                this.newTrip.startdate = '';
+                this.newTrip.enddate = '';
+                this.newTrip.description = '';
                 this.newTrip.rating = '';
                 this.newTrip.details = [];
                 this.closeModal();
@@ -104,11 +169,11 @@ export default {
                 this.newLeg.images = [];
             this.newLeg.notes = '';
         },
-        openModal(){
+        openModal() {
             this.showModal = true;
         },
-        closeModal(){
-            this.showModal= false;
+        closeModal() {
+            this.showModal = false;
         },
         computed() {
 
@@ -123,5 +188,8 @@ export default {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-
+/*card style*/
+body {
+    background-color: #f5f7fa;
+}
 </style>
