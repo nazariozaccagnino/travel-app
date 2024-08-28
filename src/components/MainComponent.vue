@@ -1,6 +1,9 @@
 <template>
     <div class="d-flex justify-content-center">
         <div class="btn btn-primary" @click="openModal">+ Aggiungi nuovo viaggio</div>
+        <div class="btn btn-primary" @click="emptyTravels">Elimina tutto</div>
+        <div class="btn btn-primary" @click="bottone">bottone tuttofare</div>
+
     </div>
     <div v-for="(item, index) in store.travels" :key="index" class="p-2 riga">
         <div class="d-flex">
@@ -54,11 +57,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Inserisci nuovo viaggio</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form>
                         <div class="mb-3">
+                            <div v-if="this.error == true">ERROREE</div>
                             <div>Inserisci nome destinazione</div>
                             <input type="text" class="form-control" v-model="newTrip.destination">
                             <div>Inserisci data inizio viaggio</div>
@@ -117,7 +120,7 @@ export default {
     data() {
         return {
             store,
-            errorInputName: false,
+            error: false,
             showModal: false,
             newTrip: {
                 destination: '',
@@ -150,7 +153,7 @@ export default {
             if (this.newTrip.destination === '') {
                 const input = document.getElementById(savebtn);
                 input.preventDefault()
-                return this.errorInputName = true;
+                this.error = true;
             }
             else {
                 this.errorInputName = false;
@@ -163,8 +166,12 @@ export default {
                 this.newTrip.description = '';
                 this.newTrip.rating = '';
                 this.newTrip.details = [];
+                this.saveTravels();
                 this.closeModal();
             }
+        },
+        bottone(){
+            this.loadTravels()            
         },
         addLeg(newLeg, index) {
             this.errorInputName = false;
@@ -195,11 +202,27 @@ export default {
             }
             return isValid
         },
-        computed() {
-
-        }
+        saveTravels() {
+            localStorage.setItem('travels', JSON.stringify(this.store.travels));
+            
+        },
+        loadTravels() {
+            const savedTravels = localStorage.getItem('travels');
+            if (savedTravels) {
+                this.store.travels = JSON.parse(savedTravels);
+            }
+            console.log(this.store.travels);
+        },
+        emptyTravels() {
+            this.store.travels = [];
+            localStorage.clear();
+        },
+    },
+    mounted() {
+        this.loadTravels()
     }
-}
+        
+    }
 </script>
 
 <style lang="scss" scoped>
