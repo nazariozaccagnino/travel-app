@@ -37,7 +37,13 @@
             </section>
             <div v-for="childItems in item.details" :key="index">
                 <div class="card my-3 mx-2" style="width: 23rem;">
-                    <div id="map"></div>
+                    <div class="bg-image hover-overlay ripple rounded-0" data-mdb-ripple-color="light">
+                        <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Food/full page/2.jpg"
+                            alt="Card image cap" />
+                        <a href="#!">
+                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                        </a>
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title">{{ childItems.name }}</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of
@@ -70,6 +76,10 @@
                             <input type="date" class="form-control" v-model="newTrip.startdate">
                             <div>Inserisci data fine viaggio</div>
                             <input type="date" class="form-control" v-model="newTrip.enddate">
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">Inserisci foto</label>
+                                <input class="form-control" type="file" id="formFile" v-on="newTrip.img">
+                            </div>
                             <div>Inserisci descrizione sintetica</div>
                             <input type="textarea" class="form-control" v-model="newTrip.description">
                             <div>Inserisci valutazione</div>
@@ -126,7 +136,7 @@
                     <form>
                         <div class="mb-3">
                             <div v-if="this.error == true">ERROREE</div>
-                            <div id="map2"></div>
+                            <div id="map"></div>
                             <div>Inserisci nome tappa</div>
                             <input type="text" class="form-control" v-model="newLeg.name">
                             <div>Inserisci data arrivo</div>
@@ -192,13 +202,14 @@ export default {
             showModal: false,
             showModal2: false,
             i: 0,
-            address:{},
+            address: {},
             newTrip: {
                 destination: '',
                 startdate: '',
                 enddate: '',
                 description: '',
                 rating: '',
+                img:'',
                 details: []
             },
             newLeg: {
@@ -236,7 +247,9 @@ export default {
                 this.newTrip.enddate = '';
                 this.newTrip.description = '';
                 this.newTrip.rating = '';
+                this.newTrip.img = '';
                 this.newTrip.details = [];
+                console.log(this.store.travels, 'poirurgjh');
                 this.saveTravels();
                 this.closeModal();
             }
@@ -250,7 +263,6 @@ export default {
             console.log(this.newLeg);
             this.store.travels[this.i].details.push({ ...newLeg });
             this.i = 0;
-            console.log(this.store.travels);
             this.newLeg.name = '';
             this.startdate = '',
                 this.enddate = '',
@@ -260,8 +272,8 @@ export default {
                 },
                 this.newLeg.images = [];
             this.newLeg.notes = '';
+            this.saveTravels();
             this.closeModal();
-            this.map3()
         },
         openModal() {
             this.showModal = true;
@@ -311,14 +323,10 @@ export default {
             }
 
             let map = new L.map('map', mapOptions);
-            let map2 = new L.map('map2', mapOptions);
 
 
             let layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
             map.addLayer(layer);
-            let layer2 = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-            map2.addLayer(layer2);
-
             let apiKey = "9098219d18994560be55415be86df062",
                 marker = null;
 
@@ -334,10 +342,10 @@ export default {
 
                 // /Callback to notify when a user has selected an address
                 resultCallback: (address) => {
-                    this.address=address
-                    this.newTrip.destination=address.address_line1
-                    
-
+                    this.address = address
+                    this.newTrip.destination = address.address_line1
+                    this.newLeg.name = address.address_line1
+                    this.address='';
                     // If there is already a marker remove it
                     if (marker) {
                         marker.remove();
@@ -356,17 +364,18 @@ export default {
 
                 //Callback to notify when new suggestions have been obtained for the entered text
                 suggestionsCallback: (suggestions) => {
-                    console.log(suggestions);
+                    // console.log(suggestions);
                 }
             });
 
 
             map.addControl(addressSearchControl);
         },
-        
+
     },
     mounted() {
-        this.loadTravels()
+        this.loadTravels();
+
     }
 
 }
