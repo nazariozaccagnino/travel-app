@@ -18,8 +18,7 @@
                         </div>
                     </div>
                     <div class="bg-image hover-overlay ripple rounded-0" data-mdb-ripple-color="light">
-                        <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Food/full page/2.jpg"
-                            alt="Card image cap" />
+                        <img class="img-fluid" :src=getTripImg(item) id="tripimg" alt="trip-img" />
                         <a href="#!">
                             <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
                         </a>
@@ -38,8 +37,7 @@
             <div v-for="childItems in item.details" :key="index">
                 <div class="card my-3 mx-2" style="width: 23rem;">
                     <div class="bg-image hover-overlay ripple rounded-0" data-mdb-ripple-color="light">
-                        <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Food/full page/2.jpg"
-                            alt="Card image cap" />
+                        <img class="img-fluid" :src=getLegImg(childItems) alt="Card image cap"/>
                         <a href="#!">
                             <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
                         </a>
@@ -78,7 +76,7 @@
                             <input type="date" class="form-control" v-model="newTrip.enddate">
                             <div class="mb-3">
                                 <label for="formFile" class="form-label">Inserisci foto</label>
-                                <input class="form-control" type="file" id="formFile" v-on="newTrip.img">
+                                <input class="form-control" type="file" id="formFile" @change="tripImgAdd">
                             </div>
                             <div>Inserisci descrizione sintetica</div>
                             <input type="textarea" class="form-control" v-model="newTrip.description">
@@ -143,8 +141,10 @@
                             <input type="date" class="form-control" v-model="newLeg.startdate">
                             <div>Inserisci data partenza</div>
                             <input type="date" class="form-control" v-model="newLeg.enddate">
-                            <div>Inserisci immagini</div>
-                            <input type="date" class="form-control" v-model="newLeg.images">
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">Inserisci foto</label>
+                                <input class="form-control" type="file" id="formFile" @change="legImgAdd">
+                            </div>
                             <div>Inserisci note</div>
                             <input type="textarea" class="form-control" v-model="newLeg.notes">
                             <div>Inserisci valutazione</div>
@@ -209,7 +209,7 @@ export default {
                 enddate: '',
                 description: '',
                 rating: '',
-                img:'',
+                img: '',
                 details: []
             },
             newLeg: {
@@ -220,7 +220,7 @@ export default {
                     latitude: 0,
                     longitude: 0
                 },
-                images: [],
+                img: '',
                 notes: '',
                 rating: '',
             },
@@ -270,7 +270,7 @@ export default {
                     "latitude": 0,
                     "longitude": 0,
                 },
-                this.newLeg.images = [];
+                this.newLeg.img = '';
             this.newLeg.notes = '';
             this.saveTravels();
             this.closeModal();
@@ -345,7 +345,7 @@ export default {
                     this.address = address
                     this.newTrip.destination = address.address_line1
                     this.newLeg.name = address.address_line1
-                    this.address='';
+                    this.address = '';
                     // If there is already a marker remove it
                     if (marker) {
                         marker.remove();
@@ -371,14 +371,60 @@ export default {
 
             map.addControl(addressSearchControl);
         },
-
+        tripImgAdd(event) {
+            console.log(event.target.files);
+            const file = event.target.files[0];
+            // Gets file from input element
+            const fr = new FileReader();
+            // Creates new FileReader object
+            fr.readAsDataURL(file);
+            // Set FileReader to output data as URL string
+            fr.addEventListener('load', () => {
+                // Waits for file reading to be complete
+                const url = fr.result
+                // Save result
+                const img = new Image();
+                img.src = url;
+                this.newTrip.img=url
+                      
+                // let tripimg = document.getElementById('tripimg');
+                // tripimg.appendChild(img)
+                // Make URL src of image and append to DOM
+                });
+            },
+        legImgAdd(event){
+            const file = event.target.files[0];
+            // Gets file from input element
+            const fr = new FileReader();
+            // Creates new FileReader object
+            fr.readAsDataURL(file);
+            // Set FileReader to output data as URL string
+            fr.addEventListener('load', () => {
+                // Waits for file reading to be complete
+                const url = fr.result
+                // Save result
+                const img = new Image();
+                img.src = url;
+                this.newLeg.img=url
+                      
+                // let tripimg = document.getElementById('tripimg');
+                // tripimg.appendChild(img)
+                // Make URL src of image and append to DOM
+                });
+            },
+        getTripImg(item){
+            return item.img;            
+        },
+        getLegImg(item){
+            return item.img;            
+        }
     },
-    mounted() {
-        this.loadTravels();
+        mounted() {
+            this.loadTravels();
+
+        }
 
     }
-
-}
 </script>
 
 <style lang="scss" scoped>
