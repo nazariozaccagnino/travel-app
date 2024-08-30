@@ -16,4 +16,12 @@ header {
     height: 200px;
     margin-bottom: 20px;
 }
+@media (max-width: 992px) {
+   header {
+       background-image: url('/public/header-sm.jpg');
+       background-repeat: no-repeat;
+       background-size: cover;
+       
+   }
+}
 </style>
