@@ -6,50 +6,52 @@
 
 
     </div>
-    <div v-for="(item, index) in store.travels" :key="index" class="p-2 riga">
-        <div class="d-flex">
-            <section class="my-3" style="width: 23rem;">
-                <div class="card">
-                    <div class="card-body d-flex flex-row">
-                        <div>
-                            <h5 class="card-title font-weight-bold mb-2">{{ item.destination }}</h5>
-                            <p class="card-text"><i class="far fa-clock pe-2"></i>{{ item.startdate }} -> {{
-                                item.enddate }}</p>
-                        </div>
-                    </div>
-                    <div class="bg-image hover-overlay ripple rounded-0" data-mdb-ripple-color="light">
-                        <img class="img-fluid" :src=getTripImg(item) id="tripimg" alt="trip-img" />
-                        <a href="#!">
-                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                        </a>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">{{ item.description }}</p>
-                        <p class="card-text">{{ item.rating }}</p>
-                        <div class="d-flex justify-content-between">
-                            <button type="button" class="btn btn-success btn-sm mx-auto"
-                                @click="openModal2(index, item)">Aggiungi
-                                nuova tappa</button>
-                            <button type="button" class="btn btn-danger btn-sm mx-auto"
-                                @click="deleteTrip(index)">Elimina viaggio</button>
-                        </div>
+    <div class="mx-4">
+        <div v-for="(item, index) in store.travels" :key="index" class="row row-cols-auto my-2 flex-nowrap overflow-x-scroll">            
+            <div class="card h-100" style="width: 300px;">
+                <div class="card-body">
+                    <div>
+                        <h3>Viaggio a:</h3>
+                        <h5 class="card-title font-weight-bold mb-2">{{ item.destination }}</h5>
+                        <p class="card-text"><i class="far fa-clock pe-2"></i>{{ item.startdate }} -> {{
+                            item.enddate }}</p>
                     </div>
                 </div>
-            </section>
-            <div v-for="(childItems, ind) in item.details" :key="index">
-                <div class="card my-3 mx-2" style="width: 23rem;">
-                    <div class="bg-image hover-overlay ripple rounded-0" data-mdb-ripple-color="light">
-                        <img class="img-fluid" :src=getLegImg(childItems) alt="Card image cap" />
+                <div class="bg-image hover-overlay ripple rounded-0" data-mdb-ripple-color="light">
+                    <img class="cardimg" :src=getTripImg(item) id="tripimg" alt="trip-img" />
+                    <a href="#!">
+                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ item.description }}</p>
+                    <p class="card-text">{{ item.rating }}</p>
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-success btn-sm mx-auto"
+                            @click="openModal2(index, item)">Aggiungi
+                            nuova tappa</button>
+                        <button type="button" class="btn btn-danger btn-sm mx-auto" @click="deleteTrip(index)">Elimina
+                            viaggio</button>
+                    </div>
+                </div>
+            </div>
+
+            <div v-for="(childItems, ind) in item.details" :key="index" class="col">
+                <div class="card h-100" style="width: 300px;">
+                    <div class="card-body">
+                        <h3>Tappa a:</h3>
+                        <h5 class="card-title">{{ childItems.name }}</h5>
+                        <div>
+                            <p class="card-text"><i class="far fa-clock pe-2"></i>{{ childItems.startdate }}
+                                -> {{
+                                    childItems.enddate }}</p>
+                        </div>
+                        <div class="bg-image hover-overlay ripple rounded-0" data-mdb-ripple-color="light">
+                        <img class="cardimg" :src=getLegImg(childItems) alt="Card image cap" />
                         <a href="#!">
                             <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
                         </a>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ childItems.name }}</h5>
-                        <div>
-                            <p class="card-text"><i class="far fa-clock pe-2"></i>{{ childItems.startdate }} -> {{
-                                childItems.enddate }}</p>
-                        </div>
                         <p class="card-text">{{ childItems.notes }}</p>
                         <button type="button" class="btn btn-sm btn-danger" @click="deleteLeg(index, ind)">Elimina
                             Tappa</button>
@@ -264,7 +266,7 @@ export default {
             this.errorInputName = false;
             console.log(index);
             console.log(this.newLeg);
-            this.store.travels[this.i].details.push({ ...newLeg });           
+            this.store.travels[this.i].details.push({ ...newLeg });
             this.i = 0;
             this.newLeg.name = '';
             this.startdate = '',
@@ -436,7 +438,6 @@ export default {
             const oldDate = "2022-12-03";
             const newDate = new Date(oldDate);
             console.log(newDate.toLocaleDateString("it-IT"));
-            
             console.log(newDate.getDate() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getFullYear());
         }
     },
@@ -462,10 +463,20 @@ body {
 
 .riga {
     overflow-x: auto;
+    white-space: nowrap;
+    float: none;
 }
 
 #map {
     width: 100%;
     height: 250px;
+}
+
+.cardimg {
+    max-width: 100%;
+    max-height: 200px;
+}
+.riga{
+    overflow-x: scroll;
 }
 </style>
