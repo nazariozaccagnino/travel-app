@@ -1,13 +1,11 @@
 <template>
     <div class="d-flex justify-content-center">
-        <div class="btn btn-primary" @click="openModal">+ Aggiungi nuovo viaggio</div>
-        <div class="btn btn-primary" @click="emptyTravels">Elimina tutto</div>
-        <div class="btn btn-primary" @click="bottone">bottone tuttofare</div>
-
-
+        <div class="btn btn-primary mx-2" @click="openModal">+ Aggiungi nuovo viaggio</div>
+        <div class="btn btn-danger mx-2" @click="emptyTravels">Elimina tutto</div>
     </div>
-    <div class="mx-4">
-        <div v-for="(item, index) in store.travels" :key="index" class="row row-cols-auto my-2 flex-nowrap overflow-x-scroll">            
+    
+    <div class="mx-4 my-4">
+        <div v-for="(item, index) in store.travels" :key="index" class="row row-cols-auto my-4 flex-nowrap overflow-x-scroll">
             <div class="card h-100" style="width: 300px;">
                 <div class="card-body">
                     <div>
@@ -37,7 +35,7 @@
             </div>
 
             <div v-for="(childItems, ind) in item.details" :key="index" class="col">
-                <div class="card h-100" style="width: 300px;">
+                <div class="card mb-2 h-100" style="width: 300px;">
                     <div class="card-body">
                         <h3>Tappa a:</h3>
                         <h5 class="card-title">{{ childItems.name }}</h5>
@@ -47,11 +45,11 @@
                                     childItems.enddate }}</p>
                         </div>
                         <div class="bg-image hover-overlay ripple rounded-0" data-mdb-ripple-color="light">
-                        <img class="cardimg" :src=getLegImg(childItems) alt="Card image cap" />
-                        <a href="#!">
-                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                        </a>
-                    </div>
+                            <img class="cardimg" :src=getLegImg(childItems) alt="Card image cap" />
+                            <a href="#!">
+                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                            </a>
+                        </div>
                         <p class="card-text">{{ childItems.notes }}</p>
                         <button type="button" class="btn btn-sm btn-danger" @click="deleteLeg(index, ind)">Elimina
                             Tappa</button>
@@ -59,6 +57,7 @@
                 </div>
             </div>
         </div>
+        
     </div>
     <!--modale-->
     <div v-if="showModal" class="modal fade show d-block" id="exampleModal" tabindex="-1"
@@ -457,10 +456,15 @@ export default {
 }
 
 /*card style*/
-body {
-    background-color: #f5f7fa;
+.card{
+    border: 3px solid #0077b6;
+    background-image: url('/public/mappamondo.png');
+    background-color: #caf0f8;
+    background-size: 50%;
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    
 }
-
 .riga {
     overflow-x: auto;
     white-space: nowrap;
@@ -476,7 +480,30 @@ body {
     max-width: 100%;
     max-height: 200px;
 }
-.riga{
+
+.riga {
     overflow-x: scroll;
+}
+
+*::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar {
+    width: 6px;
+    height: 10px;
+    background-color: #F5F5F5;
+}
+
+*::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0.44, rgb(122, 153, 217)),
+            color-stop(0.72, rgb(73, 125, 189)),
+            color-stop(0.86, rgb(28, 58, 148)));
 }
 </style>
