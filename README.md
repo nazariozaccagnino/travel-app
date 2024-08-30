@@ -1,29 +1,32 @@
-# .
+# Travel-app
 
-This template should help get you started developing with Vue 3 in Vite.
+Con travel app è possibile creare un proprio diario di viaggio diviso in tappe, con l'integrazione di mappe e foto personalizzate dall'utente.
 
-## Recommended IDE Setup
+## Requisiti per l'installazione
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Account Github
 
-## Customize configuration
+Account [Vercel](https://vercel.com/)
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Installazione
 
-## Project Setup
+Una volta creato l'account su Vercel:
+- Aggiungere un nuovo progetto
+- Importare con la voce in basso la repository Git di terze parti
+- Inserire l'[url](https://github.com/nazariozaccagnino/travel-app) della repository nell'apposito campo
+- Assegnare un nome alla nuova repository che verrà clonata nel proprio account GitHub (scegliere se renderla pubblica o privata)
+- Cliccare su "create"
+- Una volta terminato il processo vi verrà fornito il link alla web-app
 
-```sh
-npm install
-```
+## Funzionalità
 
-### Compile and Hot-Reload for Development
+- Mappa con ricerca destinazioni e inserimento automatico del luogo nel campo di immissione dati.
+- Possibilità di aggiunta di una foto personalizzata per ogni viaggio o tappa.
+- Sistema di valutazione con voto da 1 a 5 stelle
+- I dati verranno conservati perennemente, ogni dispositivo avrà il proprio set di dati. 
 
-```sh
-npm run dev
-```
+## Funzionalità in fase di sviluppo
 
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+- Modifica dei viaggi/tappe già salvati
+- Visualizzazione interattiva su mappa delle tappe con un segnaposto
+- Verifica dei dati in immissione
