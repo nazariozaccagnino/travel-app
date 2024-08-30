@@ -1,11 +1,18 @@
 <template>
-    <div class="d-flex justify-content-center">
-        <div class="btn btn-primary mx-2" @click="openModal">+ Aggiungi nuovo viaggio</div>
-        <div class="btn btn-danger mx-2" @click="emptyTravels">Elimina tutto</div>
+    <div class="text-center">
+        <h1>Con Travel Memories puoi facilmente tener traccia dei tuoi viaggi e delle tue tappe.</h1>
+        <h2>Clicca su "aggiungi nuovo viaggio" per iniziare</h2>
     </div>
-    
+    <div class="d-flex justify-content-center">
+        <div class="btn btn-primary mx-2 my-2" @click="openModal">+ Aggiungi nuovo viaggio</div>
+    </div>
+    <div class="text-center" v-if="store.travels.length > 0">
+        <h6>Scorri a destra e sinistra per visualizzare tutte le tappe</h6>
+    </div>
+
     <div class="mx-4 my-4">
-        <div v-for="(item, index) in store.travels" :key="index" class="row row-cols-auto my-4 flex-nowrap overflow-x-scroll">
+        <div v-for="(item, index) in store.travels" :key="index"
+            class="row row-cols-auto my-4 flex-nowrap overflow-x-scroll">
             <div class="card h-100" style="width: 300px;">
                 <div class="card-body">
                     <div>
@@ -23,12 +30,12 @@
                 </div>
                 <div class="card-body">
                     <p class="card-text">{{ item.description }}</p>
-                    <p class="card-text">{{ item.rating }}</p>
+                    <p class="card-text"><span v-html="tripStars(item)"></span></p>
                     <div class="d-flex justify-content-between">
-                        <button type="button" class="btn btn-success btn-sm mx-auto"
+                        <button type="button" class="btn btn-success btn-sm mx-2"
                             @click="openModal2(index, item)">Aggiungi
                             nuova tappa</button>
-                        <button type="button" class="btn btn-danger btn-sm mx-auto" @click="deleteTrip(index)">Elimina
+                        <button type="button" class="btn btn-danger btn-sm mx-2" @click="deleteTrip(index)">Elimina
                             viaggio</button>
                     </div>
                 </div>
@@ -57,7 +64,9 @@
                 </div>
             </div>
         </div>
-        
+        <div class="d-flex justify-content-center">
+            <div class="btn btn-danger mx-2" @click="emptyTravels">Elimina tutto</div>
+        </div>
     </div>
     <!--modale-->
     <div v-if="showModal" class="modal fade show d-block" id="exampleModal" tabindex="-1"
@@ -70,7 +79,6 @@
                 <div class="modal-body">
                     <form>
                         <div class="mb-3">
-                            <div v-if="this.error == true">ERROREE</div>
                             <div id="map"></div>
                             <div>Inserisci nome destinazione</div>
                             <input type="text" class="form-control" v-model="newTrip.destination">
@@ -239,24 +247,24 @@ export default {
     },
     methods: {
         addTrip(newTrip) {
-            if (this.newTrip.destination === '') {
-                const input = document.getElementById(savebtn);
-                this.error = true;
-            }
-            else {
-                this.errorInputName = false;
-                this.store.travels.push({ ...newTrip })
-                this.newTrip.destination = '';
-                this.newTrip.startdate = '';
-                this.newTrip.enddate = '';
-                this.newTrip.description = '';
-                this.newTrip.rating = '';
-                this.newTrip.img = '';
-                this.newTrip.details = [];
-                console.log(this.store.travels, 'poirurgjh');
-                this.saveTravels();
-                this.closeModal();
-            }
+            // if (this.newTrip.destination === '') {
+            //     const input = document.getElementById(savebtn);
+            //     this.error = true;
+            // }
+            // else {
+            this.errorInputName = false;
+            this.store.travels.push({ ...newTrip })
+            this.newTrip.destination = '';
+            this.newTrip.startdate = '';
+            this.newTrip.enddate = '';
+            this.newTrip.description = '';
+            this.newTrip.rating = '';
+            this.newTrip.img = '';
+            this.newTrip.details = [];
+            console.log(this.store.travels, 'poirurgjh');
+            this.saveTravels();
+            this.closeModal();
+            // }
         },
         bottone() {
             this.loadTravels()
@@ -438,6 +446,12 @@ export default {
             const newDate = new Date(oldDate);
             console.log(newDate.toLocaleDateString("it-IT"));
             console.log(newDate.getDate() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getFullYear());
+        },
+        tripStars(item) {
+            let str = '';
+            let stars = `<i class="fa-solid fa-star" style="color: #FFD43B;"></i>`;
+            str = stars.repeat(item.rating)
+                return str
         }
     },
     mounted() {
@@ -456,15 +470,16 @@ export default {
 }
 
 /*card style*/
-.card{
+.card {
     border: 3px solid #0077b6;
     background-image: url('/public/mappamondo.png');
     background-color: #caf0f8;
     background-size: 50%;
     background-position: bottom right;
     background-repeat: no-repeat;
-    
+
 }
+
 .riga {
     overflow-x: auto;
     white-space: nowrap;
