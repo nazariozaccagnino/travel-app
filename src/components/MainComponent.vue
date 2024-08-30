@@ -58,6 +58,7 @@
                             </a>
                         </div>
                         <p class="card-text">{{ childItems.notes }}</p>
+                        <p class="card-text"><span v-html="legStars(childItems)"></span></p>
                         <button type="button" class="btn btn-sm btn-danger" @click="deleteLeg(index, ind)">Elimina
                             Tappa</button>
                     </div>
@@ -452,12 +453,17 @@ export default {
             let stars = `<i class="fa-solid fa-star" style="color: #FFD43B;"></i>`;
             str = stars.repeat(item.rating)
                 return str
-        }
+        },
+        legStars(childItems){
+            let str = '';
+            let stars = `<i class="fa-solid fa-star" style="color: #FFD43B;"></i>`;
+            str = stars.repeat(childItems.rating)
+                return str
+        },
     },
     mounted() {
         this.loadTravels();
         this.changeDate()
-
     }
 
 }

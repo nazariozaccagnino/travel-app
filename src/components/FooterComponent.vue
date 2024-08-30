@@ -1,6 +1,6 @@
 <template>
-    <div>
-        Footer
+    <div class="text-center">
+        <h6>Made with &hearts; by Nazario Zaccagnino</h6>
     </div>
 </template>
 
